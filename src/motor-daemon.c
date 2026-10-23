@@ -1702,7 +1702,9 @@ int main(int argc, char *argv[]) {
         syslog(LOG_DEBUG, "request type is %c", request_message.type);
         switch (request_message.type) {
         case 'g': // relative movement
-          motor_status_get(&motor_message);
+          // The jog is logical, so clamp it against the logical position: on
+          // an inverted axis the raw one is the mirror of where the move goes.
+          motor_status_get_logical(&motor_message);
           {
             int rel_x = request_message.x;
             int rel_y = request_message.y;
